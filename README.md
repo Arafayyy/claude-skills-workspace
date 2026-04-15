@@ -27,6 +27,7 @@ It acts as a home base for:
 
 ## Current Skills
 
+- `add-webhook` - Add new Modal webhook directives and related wiring for a larger webhook-based system
 - [design-website](/home/abdur-rafay/claude-code/.claude/skills/design-website/README.md:1) - Generate a premium one-page website mockup for a prospect
 
 ## How This Workspace Works
@@ -58,6 +59,11 @@ Add a folder under `.claude/skills/` with:
 - `SKILL.md` for instructions
 - `README.md` for human-facing setup and usage
 - `scripts/` for deterministic helpers when needed
+
+Current examples in this workspace:
+
+- `add-webhook` for webhook-oriented orchestration guidance
+- `design-website` for scripted prospect website generation
 
 ## Conventions
 
