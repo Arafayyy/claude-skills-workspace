@@ -1,140 +1,79 @@
-# Design Website
+# Claude Workspace
 
-Generate a premium one-page website mockup for a prospect using data from a Google Sheet.
+This repository is a local workspace for building, organizing, and evolving Claude agents and skills.
 
-This skill is built for fast outbound or pitch workflows: pull one prospect row, turn it into structured JSON, and generate a polished HTML mockup you can open locally.
+It acts as a home base for:
 
-## What It Does
+- shared system instructions
+- focused subagents
+- reusable skills
+- helper scripts and local conventions
 
-- Reads a single prospect from a Google Sheet
-- Normalizes flexible sheet column names into a predictable JSON shape
-- Generates a self-contained HTML landing page
-- Uses Unsplash images when available
-- Falls back to placeholder imagery when no Unsplash key is configured
+## Structure
 
-## Files
+- [.claude/CLAUDE.md](/home/abdur-rafay/claude-code/.claude/CLAUDE.md) - Shared brain and default behavior for the workspace
+- `.claude/agents/` - Task-specific agents with narrow responsibilities
+- `.claude/skills/` - Reusable skills made of instructions plus optional scripts
+- `.tmp/` - Temporary generated outputs
+- [.gitignore](/home/abdur-rafay/claude-code/.gitignore:1) - Local ignore rules for workspace-only files
 
-- [SKILL.md](/home/abdur-rafay/claude-code/.claude/skills/design-website/SKILL.md) - Claude skill instructions
-- [scripts/read_prospect.py](/home/abdur-rafay/claude-code/.claude/skills/design-website/scripts/read_prospect.py) - Reads one row from Google Sheets and prints JSON
-- [scripts/generate_website.py](/home/abdur-rafay/claude-code/.claude/skills/design-website/scripts/generate_website.py) - Reads JSON from stdin and writes an HTML mockup to `.tmp/`
+## Current Agents
 
-## Workflow
+- [code-reviewer.md](/home/abdur-rafay/claude-code/.claude/agents/code-reviewer.md:1)
+- [email-classifier.md](/home/abdur-rafay/claude-code/.claude/agents/email-classifier.md:1)
+- [qa.md](/home/abdur-rafay/claude-code/.claude/agents/qa.md:1)
+- [research.md](/home/abdur-rafay/claude-code/.claude/agents/research.md:1)
+- [tell-me-the-time.md](/home/abdur-rafay/claude-code/.claude/agents/tell-me-the-time.md:1)
 
-1. Read a single prospect row from Google Sheets.
-2. Pipe that JSON into the website generator.
-3. Open the generated HTML file in a browser.
+## Current Skills
 
-## Expected Prospect Fields
+- [design-website](/home/abdur-rafay/claude-code/.claude/skills/design-website/README.md:1) - Generate a premium one-page website mockup for a prospect
 
-The sheet header matching is flexible. These names are normalized automatically:
+## How This Workspace Works
 
-- `company`, `company_name`, `organization_name` -> `company_name`
-- `about`, `description`, `company_description` -> `description`
-- `keywords`, `services`, `company_keywords` -> `keywords`
-- `phone`, `phone_number`, `company_phone` -> `phone`
-- `email`, `contact_email` -> `email`
-- `address`, `full_address`, `company_address` -> `address`
-- `city` -> `city`
-- `state` -> `state`
-- `country` -> `country`
-- `industry`, `category` -> `industry`
-- `first_name` -> `first_name`
-- `last_name` -> `last_name`
-- `title`, `role` -> `title`
-- `website`, `company_website` -> `website`
+The design is simple:
 
-## Requirements
+1. `CLAUDE.md` defines the global defaults.
+2. Agents handle focused, repeatable tasks.
+3. Skills package instructions with scripts so execution is more reliable.
+4. Specialized files can override the shared defaults when needed.
 
-- Python 3
-- Google Sheets API access
-- Google OAuth client credentials
-- Python packages used by the scripts:
-  - `python-dotenv`
-  - `gspread`
-  - `google-auth`
-  - `google-auth-oauthlib`
-  - `google-auth-httplib2`
+## Creating New Agents
 
-## Auth Setup
+Add a new markdown file under `.claude/agents/`.
 
-### Google Sheets
+Good agent files usually include:
 
-The reader script looks for:
+- a clear purpose
+- when to use the agent
+- behavior rules
+- useful commands or tools
+- output expectations
+- guardrails
 
-- `token.json` in the current working directory
-- `credentials.json` in the current working directory
-- or `GOOGLE_APPLICATION_CREDENTIALS` pointing to your credentials file
+## Creating New Skills
 
-On first run, OAuth opens a local browser flow and then saves `token.json`.
+Add a folder under `.claude/skills/` with:
 
-### Unsplash
+- `SKILL.md` for instructions
+- `README.md` for human-facing setup and usage
+- `scripts/` for deterministic helpers when needed
 
-Set this in your `.env` file if you want real stock photos:
+## Conventions
 
-```env
-UNSPLASH_ACCESS_KEY=your_key_here
-```
+- Keep instructions practical and easy to scan.
+- Prefer small, focused agents over giant all-purpose prompts.
+- Put repeatable logic into scripts when possible.
+- Document setup and usage close to the skill itself.
+- Keep workspace-specific files out of version control when appropriate.
 
-If this key is missing, the generator uses `picsum.photos` placeholders instead.
+## Local Notes
 
-## Usage
+- `.codex` is ignored in [.gitignore](/home/abdur-rafay/claude-code/.gitignore:1)
+- Some skills may require local credentials, API keys, or OAuth setup
+- Generated outputs should usually go into `.tmp/` unless a skill says otherwise
 
-### Read one prospect
+## Goal
 
-```bash
-python3 .claude/skills/design-website/scripts/read_prospect.py \
-  --url "GOOGLE_SHEET_URL" \
-  --row 1
-```
-
-Optional worksheet selection:
-
-```bash
-python3 .claude/skills/design-website/scripts/read_prospect.py \
-  --url "GOOGLE_SHEET_URL" \
-  --row 1 \
-  --worksheet "Sheet1"
-```
-
-### Generate a website directly from Sheets
-
-```bash
-python3 .claude/skills/design-website/scripts/read_prospect.py \
-  --url "GOOGLE_SHEET_URL" \
-  --row 1 | \
-python3 .claude/skills/design-website/scripts/generate_website.py
-```
-
-### Generate from a saved JSON file
-
-```bash
-python3 .claude/skills/design-website/scripts/generate_website.py < prospect.json
-```
-
-## Output
-
-The generator writes a file like:
-
-```text
-.tmp/website_company_name.html
-```
-
-The script also prints the output path after generation.
-
-## Design Direction
-
-The generated mockup follows the style documented in the skill:
-
-- editorial, premium landing page feel
-- off-white background
-- bold uppercase typography
-- serif italic supporting text
-- strong image-driven hero
-- simple bordered buttons
-
-## Notes
-
-- Row numbers are `1`-indexed and do not include the header row.
-- Empty sheet values are skipped in the output JSON.
-- If the selected row is out of range, the reader exits with an error.
-- Generated HTML is self-contained except for remote images and Google Fonts.
+This workspace is meant to be the central place where all Claude capabilities live together cleanly:
+one shared brain, many focused agents, and reusable skills that can grow over time.
