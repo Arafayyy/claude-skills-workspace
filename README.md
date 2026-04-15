@@ -11,7 +11,7 @@ It acts as a home base for:
 
 ## Structure
 
-- [.claude/CLAUDE.md](/home/abdur-rafay/claude-code/.claude/CLAUDE.md) - Shared brain and default behavior for the workspace
+- [CLAUDE.md](/home/abdur-rafay/claude-code/CLAUDE.md:1) - Shared brain and default behavior for the workspace
 - `.claude/agents/` - Task-specific agents with narrow responsibilities
 - `.claude/skills/` - Reusable skills made of instructions plus optional scripts
 - `.tmp/` - Temporary generated outputs
@@ -19,6 +19,7 @@ It acts as a home base for:
 
 ## Current Agents
 
+- [PLANNER.md](/home/abdur-rafay/claude-code/.claude/agents/PLANNER.md:1)
 - [code-reviewer.md](/home/abdur-rafay/claude-code/.claude/agents/code-reviewer.md:1)
 - [email-classifier.md](/home/abdur-rafay/claude-code/.claude/agents/email-classifier.md:1)
 - [qa.md](/home/abdur-rafay/claude-code/.claude/agents/qa.md:1)

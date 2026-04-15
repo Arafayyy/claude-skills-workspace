@@ -18,7 +18,7 @@ The goal is to keep the system simple, practical, and easy to extend.
 
 ## Current Workspace Structure
 
-- `.claude/CLAUDE.md` - Shared global instructions
+- `CLAUDE.md` - Shared global instructions
 - `.claude/agents/` - Focused agents for narrow tasks
 - `.claude/skills/` - Skills made of `SKILL.md` files and optional `scripts/`
 - `.claude/rules/` - Additional local Claude rules
@@ -31,6 +31,7 @@ The goal is to keep the system simple, practical, and easy to extend.
 
 ## Current Subagents
 
+- `planner` - Turns rough ideas or requests into clear execution plans
 - `code-reviewer` - Reviews code and reports issues by severity
 - `email-classifier` - Classifies Gmail-style email tasks
 - `qa` - Helps generate and run tests
